@@ -1,5 +1,7 @@
 using System.Collections;
+using TMPro.EditorUtilities;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [RequireComponent( typeof( Rigidbody2D ) )]
 [RequireComponent( typeof( Circle ) )]
@@ -7,14 +9,20 @@ public class PlayerControl : MonoBehaviour
 {
     [SerializeField] private KeyCode inputKey;
     
-    public int _score;
     private bool _isOverlapping;
-    public int timeRemaining;
+    private GameManager _gameManager;
+    private Circle _circle;
+
+    private void Awake()
+    {
+        _gameManager = FindObjectOfType<GameManager>();
+        _circle = GetComponent<Circle>();
+    }
+    
     private void Update()
     {
-        Debug.Log("Score: " + _score);
         if ( Input.GetKeyDown( inputKey ) && !_isOverlapping )
-            _score--;
+            _gameManager.ChangeScore( -1 );
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -22,34 +30,11 @@ public class PlayerControl : MonoBehaviour
         _isOverlapping = true;
         StartCoroutine( CheckForInput() );
     }
-
     private void OnTriggerExit2D(Collider2D other)
     {
         _isOverlapping = false;
-        //A penalty should also apply if the keyPressed=false as they exit
-        
     }
-
-    public void StartCountdown(int time)
-    {
-        timeRemaining = time;
-        StartCoroutine(CountDown());
-    }
-
-    private IEnumerator CountDown()
-    {
-        while (timeRemaining > 0)
-        {
-            yield return new WaitForSeconds(1f); // Wait for 1 second
-            timeRemaining--;
-            Debug.Log("Time Remaining: " + timeRemaining);
-        }
-        // Optionally handle what happens when time runs out
-        Debug.Log("Time's up!");
-        this.GetComponent<Circle>().SpeedUp();
-    }
-
-
+    
     private IEnumerator CheckForInput()
     {
         var keyPressed = false;
@@ -58,8 +43,14 @@ public class PlayerControl : MonoBehaviour
             yield return null;
             if ( !Input.GetKeyDown( inputKey ) ) continue;
             keyPressed = true;
-            _score++;
-            this.GetComponent<Circle>().SlowDown();
+            _gameManager.ChangeScore( 1 );
+            _circle.Accelerate( -1 );
+        }
+
+        if ( !keyPressed )
+        {
+            // if the key wasn't pressed reduce score
+            _gameManager.ChangeScore( -1 );
         }
     }
 }

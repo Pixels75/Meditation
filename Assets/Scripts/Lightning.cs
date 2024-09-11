@@ -1,60 +1,53 @@
-
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent( typeof( SpriteRenderer ) )]
 public class Lightning : MonoBehaviour
 {
-    [SerializeField] float timeToLightning;
-    [SerializeField] float LightningMin;
-    [SerializeField] float LightningMax;
-    [SerializeField] int timeToThunder;
-    [SerializeField] GameObject player;
-    [SerializeField] SpriteRenderer lightningImage; // Using SpriteRenderer for the lightning flash
-
-    float lightningTimer;
-    float timer;
-    bool struck;
-    // Start is called before the first frame update
-    void Start()
+    [Header("Lightning Attributes")]
+    [SerializeField] private float minCooldownRange;
+    [SerializeField] private float maxCooldownRange;
+    [SerializeField] private float speedUpValue;
+    [Header("Lightning Visuals")]
+    [SerializeField] private Color lightningColor;
+    [SerializeField] private float lightningDuration;
+    
+    private SpriteRenderer _lightningSprite;
+    private UIManager _uiManager;
+    private PlayerControl _playerControl;
+    private Circle _circle;
+    
+    private float _lightningCooldown;
+    private float _timer;
+    private bool _struck;
+    
+    private void Awake()
     {
-        // Set the initial lightning timer
-        lightningTimer = timeToLightning + Random.Range(LightningMin, LightningMax);
+        _lightningSprite = GetComponent<SpriteRenderer>();
+        _uiManager = FindObjectOfType<UIManager>();
+        _playerControl = FindObjectOfType<PlayerControl>();
+        _circle = _playerControl.gameObject.GetComponent<Circle>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        timer += Time.deltaTime;
-
-        // If it's time for lightning to strike
-        if (timer > lightningTimer)
-        {
-            // Flash the lightning
-            Color flashColor = lightningImage.color;
-            flashColor.a = 1f;
-            lightningImage.color = flashColor;
-
-            if(!struck)
-            {
-                player.GetComponent<PlayerControl>().StartCountdown(timeToThunder);
-                struck = true;
-            }
-            
-            
-        }
-
+        _timer += Time.deltaTime;
+        /* Set the color to something between lightning color and transparent
+        /* depending on the timer, if timer is 0 then the color is 'lightning color'
+        /* and if the timer is equal to 'lightningDuration' or bigger the color is
+        /* transparent */
+        _lightningSprite.color = Color.Lerp( lightningColor, Color.clear, _timer / lightningDuration );
         
-        if (timer > lightningTimer + 0.5f)
-        {
-            // Hide the lightning flash
-            Color flashColor = lightningImage.color;
-            flashColor.a = 0f;
-            lightningImage.color = flashColor;
-            struck = false;
-            // Reset the timer for the next lightning strike
-            lightningTimer = Random.Range(LightningMin, LightningMax);
-            timer = 0; // Reset the timer
-        }
+        if ( _timer >= _lightningCooldown ) Flash();
+        if ( _lightningCooldown - _timer > 3f ) return;
+        
+        var timer = Mathf.RoundToInt( _lightningCooldown - _timer );
+        _uiManager.SetTimerText( timer );
+    }
+
+    private void Flash()
+    {
+        _circle.Accelerate( speedUpValue );
+        _lightningCooldown = Random.Range( minCooldownRange, maxCooldownRange );
+        _timer = 0f;
     }
 }

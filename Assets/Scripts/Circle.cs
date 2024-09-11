@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class Circle : MonoBehaviour
 {
+    [Header("Circle Attributes")]
     [SerializeField][Range( 0f, 20f)] private float speed;
     [SerializeField] private float minSpeed;
-    [SerializeField] private float speedUpIncraments;
-    [SerializeField] private float speedDownIncaments;
+    [Header("References")]
     [SerializeField] private Transform rightEnd;
     [SerializeField] private Transform leftEnd;
     private Vector3 _direction = Vector3.right;
@@ -27,13 +27,10 @@ public class Circle : MonoBehaviour
             _direction = Vector3.right;
         }
     }
-    public void SpeedUp()
+
+    public void Accelerate( float value )
     {
-        speed += speedUpIncraments;
-    }
-    public void SlowDown()
-    {
-        if (speed > minSpeed)
-            speed -= speedDownIncaments;
+        if ( value < 0f && speed <= minSpeed ) return;
+        speed += value;
     }
 }
