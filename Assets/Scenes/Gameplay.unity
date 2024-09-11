@@ -155,8 +155,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81475181b83542a2cb60b79006efd337, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
-  minSpeed: 5
+  speed: 10
+  minSpeed: 10
   rightEnd: {fileID: 1953443776}
   leftEnd: {fileID: 1456209599}
 --- !u!212 &7159889
@@ -275,6 +275,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputKey: 32
+  thunderTimeframe: 1
 --- !u!50 &7159893
 Rigidbody2D:
   serializedVersion: 4
@@ -958,7 +959,7 @@ GameObject:
   - component: {fileID: 1194504814}
   - component: {fileID: 1194504816}
   m_Layer: 0
-  m_Name: Lightning
+  m_Name: Thunderstorm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1043,14 +1044,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74e06a247e33a4a49977a7bcfba72e30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minCooldownRange: 5
-  maxCooldownRange: 10
+  minCooldown: 5
+  maxCooldown: 10
   timeTillStorm: 10
   speedUpValue: 10
   thunderDelay: 3
-  thunderLeniency: 0.5
-  lightningColor: {r: 1, g: 1, b: 1, a: 1}
+  lightningColor: {r: 0.7688679, g: 1, b: 0.9849503, a: 1}
   lightningDuration: 0.5
+  timerScoreThreshold: 30
 --- !u!1 &1456209598
 GameObject:
   m_ObjectHideFlags: 0

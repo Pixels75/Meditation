@@ -6,22 +6,27 @@ using UnityEngine;
 public class PlayerControl : MonoBehaviour
 {
     [SerializeField] private KeyCode inputKey;
+    [SerializeField] public float thunderTimeframe;
     
-    private GameManager _gameManager;
     private Circle _circle;
     private bool _isOverlapping;
     private bool _thunderStrikeActive;
 
     private void Awake()
     {
-        _gameManager = FindObjectOfType<GameManager>();
         _circle = GetComponent<Circle>();
+        // Subscribe to the "ThunderStrike" event and do the lambda expression below on invocation
+        Thunderstorm.ThunderStrike += () =>
+        {
+            _thunderStrikeActive = true; 
+            StartCoroutine(CheckForThunderInput(thunderTimeframe));
+        };
     }
     
     private void Update()
     {
         if (Input.GetKeyDown(inputKey) && !_isOverlapping && !_thunderStrikeActive)
-            _gameManager.ChangeScore(-1);
+            GameManager.Instance.ChangeScore(-1);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -33,34 +38,26 @@ public class PlayerControl : MonoBehaviour
     {
         _isOverlapping = false;
     }
-    public void ThunderStrike(float time)
-    {
-        _thunderStrikeActive = true;
-        StartCoroutine(ThunderStrikeInputWindow(time));
-    }
 
-    private IEnumerator ThunderStrikeInputWindow(float time)
+    private IEnumerator CheckForThunderInput(float time)
     {
         bool keyPressed = false;
         float timer = 0f;
 
         while (timer < time)
         {
+            yield return null;
             timer += Time.deltaTime;
 
-            if (Input.GetKeyDown(inputKey))
-            {
-                keyPressed = true;
-                _gameManager.ChangeScore(5);
-                break;
-            }
-
-            yield return null;
+            if (!Input.GetKeyDown(inputKey)) continue;
+            keyPressed = true;
+            GameManager.Instance.ChangeScore(5);
+            break;
         }
 
         if (!keyPressed)
         {
-            _circle.Accelerate(5f); // Speed up if the key wasn't pressed
+            _circle.Accelerate( 5f ); // Speed up if the key wasn't pressed
         }
 
         _thunderStrikeActive = false;
@@ -73,14 +70,14 @@ public class PlayerControl : MonoBehaviour
             yield return null;
             if ( !Input.GetKeyDown( inputKey ) ) continue;
             keyPressed = true;
-            _gameManager.ChangeScore( 1 );
+            GameManager.Instance.ChangeScore( 1 );
             _circle.Accelerate( -1f );
         }
 
         if ( !keyPressed )
         {
             // if the key wasn't pressed reduce score
-            _gameManager.ChangeScore( -1 );
+            GameManager.Instance.ChangeScore( -1 );
         }
     }
 }
