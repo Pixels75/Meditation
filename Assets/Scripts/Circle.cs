@@ -8,6 +8,7 @@ public class Circle : MonoBehaviour
     [Header("References")]
     [SerializeField] private Transform rightEnd;
     [SerializeField] private Transform leftEnd;
+    
     private Vector3 _direction = Vector3.right;
 
     private void Update()

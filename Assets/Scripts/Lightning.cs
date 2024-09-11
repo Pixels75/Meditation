@@ -32,14 +32,14 @@ public class Lightning : MonoBehaviour
     {
         _timer += Time.deltaTime;
         /* Set the color to something between lightning color and transparent
-        /* depending on the timer, if timer is 0 then the color is 'lightning color'
-        /* and if the timer is equal to 'lightningDuration' or bigger the color is
-        /* transparent */
+         * depending on the timer, if timer is 0 then the color is 'lightning color'
+         * and if the timer is equal to 'lightningDuration' or bigger the color is
+         * transparent */
         _lightningSprite.color = Color.Lerp( lightningColor, Color.clear, _timer / lightningDuration );
         
         if ( _timer >= _lightningCooldown ) Flash();
-        if ( _lightningCooldown - _timer > 3f ) return;
         
+        if ( _lightningCooldown - _timer > 3f ) return;
         var timer = Mathf.RoundToInt( _lightningCooldown - _timer );
         _uiManager.SetTimerText( timer );
     }
