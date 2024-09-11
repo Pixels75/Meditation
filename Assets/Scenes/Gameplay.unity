@@ -1046,6 +1046,7 @@ MonoBehaviour:
   minCooldownRange: 5
   maxCooldownRange: 10
   speedUpValue: 10
+  thunderDelay: 1
   lightningColor: {r: 1, g: 1, b: 1, a: 1}
   lightningDuration: 0.5
 --- !u!1 &1456209598

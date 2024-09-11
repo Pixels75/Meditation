@@ -7,6 +7,7 @@ public class Lightning : MonoBehaviour
     [SerializeField] private float minCooldownRange;
     [SerializeField] private float maxCooldownRange;
     [SerializeField] private float speedUpValue;
+    [SerializeField] private float thunderDelay;
     [Header("Lightning Visuals")]
     [SerializeField] private Color lightningColor;
     [SerializeField] private float lightningDuration;
@@ -36,8 +37,12 @@ public class Lightning : MonoBehaviour
          * and if the timer is equal to 'lightningDuration' or bigger the color is
          * transparent */
         _lightningSprite.color = Color.Lerp( lightningColor, Color.clear, _timer / lightningDuration );
-        
-        if ( _timer >= _lightningCooldown ) Flash();
+
+        if (_timer >= _lightningCooldown)
+        {
+            Flash();
+            Invoke( nameof( Thunder ), thunderDelay );
+        }
         
         if ( _lightningCooldown - _timer > 3f ) return;
         var timer = Mathf.RoundToInt( _lightningCooldown - _timer );
@@ -46,8 +51,12 @@ public class Lightning : MonoBehaviour
 
     private void Flash()
     {
-        _circle.Accelerate( speedUpValue );
         _lightningCooldown = Random.Range( minCooldownRange, maxCooldownRange );
         _timer = 0f;
+    }
+
+    private void Thunder()
+    {
+        _circle.Accelerate( speedUpValue );
     }
 }
