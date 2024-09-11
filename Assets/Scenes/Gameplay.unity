@@ -156,7 +156,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
-  minSpeed: 10
+  minSpeed: 5
   rightEnd: {fileID: 1953443776}
   leftEnd: {fileID: 1456209599}
 --- !u!212 &7159889
@@ -1045,8 +1045,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minCooldownRange: 5
   maxCooldownRange: 10
+  timeTillStorm: 10
   speedUpValue: 10
-  thunderDelay: 1
+  thunderDelay: 3
+  thunderLeniency: 0.5
   lightningColor: {r: 1, g: 1, b: 1, a: 1}
   lightningDuration: 0.5
 --- !u!1 &1456209598

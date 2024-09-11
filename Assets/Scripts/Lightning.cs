@@ -6,8 +6,10 @@ public class Lightning : MonoBehaviour
     [Header("Lightning Attributes")]
     [SerializeField] private float minCooldownRange;
     [SerializeField] private float maxCooldownRange;
+    [SerializeField] private float timeTillStorm;
     [SerializeField] private float speedUpValue;
     [SerializeField] private float thunderDelay;
+    [SerializeField] private float thunderLeniency;
     [Header("Lightning Visuals")]
     [SerializeField] private Color lightningColor;
     [SerializeField] private float lightningDuration;
@@ -16,13 +18,15 @@ public class Lightning : MonoBehaviour
     private UIManager _uiManager;
     private PlayerControl _playerControl;
     private Circle _circle;
-    
+
+    private float _timeTillThunder;
     private float _lightningCooldown;
     private float _timer;
     private bool _struck;
     
     private void Awake()
     {
+        _lightningCooldown = timeTillStorm;
         _lightningSprite = GetComponent<SpriteRenderer>();
         _uiManager = FindObjectOfType<UIManager>();
         _playerControl = FindObjectOfType<PlayerControl>();
@@ -41,11 +45,19 @@ public class Lightning : MonoBehaviour
         if (_timer >= _lightningCooldown)
         {
             Flash();
-            Invoke( nameof( Thunder ), thunderDelay );
+            //Invoke( nameof( Thunder ), thunderDelay );
+            _timeTillThunder = thunderDelay;
+            _struck = false;
         }
         
-        if ( _lightningCooldown - _timer > 3f ) return;
-        var timer = Mathf.RoundToInt( _lightningCooldown - _timer );
+        if (_timeTillThunder <= 0f ) return;
+        _timeTillThunder -= Time.deltaTime;
+        if (_timeTillThunder < thunderLeniency / 2 && !_struck)
+        { 
+            _playerControl.ThunderStrike(thunderLeniency);
+            _struck = true;
+        }
+        var timer = Mathf.RoundToInt( _timeTillThunder );
         _uiManager.SetTimerText( timer );
     }
 

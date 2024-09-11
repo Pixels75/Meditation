@@ -10,6 +10,7 @@ public class PlayerControl : MonoBehaviour
     private GameManager _gameManager;
     private Circle _circle;
     private bool _isOverlapping;
+    private bool _thunderStrikeActive;
 
     private void Awake()
     {
@@ -19,8 +20,8 @@ public class PlayerControl : MonoBehaviour
     
     private void Update()
     {
-        if ( Input.GetKeyDown( inputKey ) && !_isOverlapping )
-            _gameManager.ChangeScore( -1 );
+        if (Input.GetKeyDown(inputKey) && !_isOverlapping && !_thunderStrikeActive)
+            _gameManager.ChangeScore(-1);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -32,7 +33,38 @@ public class PlayerControl : MonoBehaviour
     {
         _isOverlapping = false;
     }
-    
+    public void ThunderStrike(float time)
+    {
+        _thunderStrikeActive = true;
+        StartCoroutine(ThunderStrikeInputWindow(time));
+    }
+
+    private IEnumerator ThunderStrikeInputWindow(float time)
+    {
+        bool keyPressed = false;
+        float timer = 0f;
+
+        while (timer < time)
+        {
+            timer += Time.deltaTime;
+
+            if (Input.GetKeyDown(inputKey))
+            {
+                keyPressed = true;
+                _gameManager.ChangeScore(5);
+                break;
+            }
+
+            yield return null;
+        }
+
+        if (!keyPressed)
+        {
+            _circle.Accelerate(5f); // Speed up if the key wasn't pressed
+        }
+
+        _thunderStrikeActive = false;
+    }
     private IEnumerator CheckForInput()
     {
         var keyPressed = false;
