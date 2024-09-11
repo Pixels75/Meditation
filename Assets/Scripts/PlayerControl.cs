@@ -6,9 +6,10 @@ using UnityEngine;
 public class PlayerControl : MonoBehaviour
 {
     [SerializeField] private KeyCode inputKey;
-    private int _score;
+    
+    public int _score;
     private bool _isOverlapping;
-
+    public int timeRemaining;
     private void Update()
     {
         Debug.Log("Score: " + _score);
@@ -25,7 +26,29 @@ public class PlayerControl : MonoBehaviour
     private void OnTriggerExit2D(Collider2D other)
     {
         _isOverlapping = false;
+        //A penalty should also apply if the keyPressed=false as they exit
+        
     }
+
+    public void StartCountdown(int time)
+    {
+        timeRemaining = time;
+        StartCoroutine(CountDown());
+    }
+
+    private IEnumerator CountDown()
+    {
+        while (timeRemaining > 0)
+        {
+            yield return new WaitForSeconds(1f); // Wait for 1 second
+            timeRemaining--;
+            Debug.Log("Time Remaining: " + timeRemaining);
+        }
+        // Optionally handle what happens when time runs out
+        Debug.Log("Time's up!");
+        this.GetComponent<Circle>().SpeedUp();
+    }
+
 
     private IEnumerator CheckForInput()
     {
@@ -36,6 +59,7 @@ public class PlayerControl : MonoBehaviour
             if ( !Input.GetKeyDown( inputKey ) ) continue;
             keyPressed = true;
             _score++;
+            this.GetComponent<Circle>().SlowDown();
         }
     }
 }
