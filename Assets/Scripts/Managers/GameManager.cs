@@ -10,13 +10,13 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         // Singleton
-        if (Instance == null)
+        if ( Instance == null )
         {
             Instance = this;
         }
-        else if (Instance != this)
+        else if ( Instance != this )
         {
-            Destroy(gameObject);
+            Destroy( gameObject );
         }
         _uiManager = FindObjectOfType<UIManager>();
     }

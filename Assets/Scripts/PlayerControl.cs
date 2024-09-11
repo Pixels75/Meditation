@@ -15,47 +15,45 @@ public class PlayerControl : MonoBehaviour
     private void Awake()
     {
         _circle = GetComponent<Circle>();
-        // Subscribe to the "ThunderStrike" event and do the lambda expression below on invocation
-        Thunderstorm.ThunderStrike += () =>
-        {
-            _thunderStrikeActive = true; 
-            StartCoroutine(CheckForThunderInput(thunderTimeframe));
-        };
+        // Subscribe to the "ThunderStrike" event and do the lambda expression on invocation
+        Thunderstorm.ThunderStrike += () => { StartCoroutine( CheckForThunderInput( thunderTimeframe ) ); };
     }
     
     private void Update()
     {
-        if (Input.GetKeyDown(inputKey) && !_isOverlapping && !_thunderStrikeActive)
-            GameManager.Instance.ChangeScore(-1);
+        if ( Input.GetKeyDown( inputKey ) && !_isOverlapping && !_thunderStrikeActive )
+            GameManager.Instance.ChangeScore( -1 );
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter2D( Collider2D other )
     {
         _isOverlapping = true;
         StartCoroutine( CheckForInput() );
     }
-    private void OnTriggerExit2D(Collider2D other)
+    private void OnTriggerExit2D( Collider2D other )
     {
         _isOverlapping = false;
     }
 
-    private IEnumerator CheckForThunderInput(float time)
+    private IEnumerator CheckForThunderInput( float time )
     {
+        _thunderStrikeActive = true;
+        
         bool keyPressed = false;
         float timer = 0f;
 
-        while (timer < time)
+        while ( timer < time )
         {
             yield return null;
             timer += Time.deltaTime;
 
-            if (!Input.GetKeyDown(inputKey)) continue;
+            if ( !Input.GetKeyDown( inputKey ) ) continue;
             keyPressed = true;
-            GameManager.Instance.ChangeScore(5);
+            GameManager.Instance.ChangeScore( 5 );
             break;
         }
 
-        if (!keyPressed)
+        if ( !keyPressed )
         {
             _circle.Accelerate( 5f ); // Speed up if the key wasn't pressed
         }

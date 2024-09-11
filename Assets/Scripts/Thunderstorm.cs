@@ -1,6 +1,4 @@
-using System;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 [RequireComponent( typeof( SpriteRenderer ) )]
@@ -38,7 +36,7 @@ public class Thunderstorm : MonoBehaviour
         _timer += Time.deltaTime;
         _lightningSprite.color = Color.Lerp( lightningColor, Color.clear, _timer / lightningDuration );
 
-        if (_timer >= _lightningCooldown) Flash();
+        if ( _timer >= _lightningCooldown ) Flash();
         HandleThunder();
         DisplayTimer();
     }
@@ -62,7 +60,7 @@ public class Thunderstorm : MonoBehaviour
 
     private void DisplayTimer()
     {
-        if (GameManager.Instance.Score >= timerScoreThreshold) return;
+        if ( GameManager.Instance.Score >= timerScoreThreshold ) return;
         var timer = Mathf.CeilToInt( Mathf.Max( 0f, _timeTillThunder ) );
         UIManager.Instance.SetTimerText( timer );
     }

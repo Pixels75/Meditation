@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,13 +11,13 @@ public class UIManager : MonoBehaviour
     private void Awake()
     {
         // Singleton
-        if (Instance == null)
+        if ( Instance == null )
         {
             Instance = this;
         }
-        else if (Instance != this)
+        else if ( Instance != this )
         {
-            Destroy(gameObject);
+            Destroy( gameObject );
         }
     }
     
@@ -29,7 +28,7 @@ public class UIManager : MonoBehaviour
 
     public void SetTimerText( int time )
     {
-        if (time == 0)
+        if ( time == 0 )
         {
             timerText.text = string.Empty;
             return;
