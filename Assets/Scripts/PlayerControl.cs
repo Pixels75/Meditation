@@ -22,7 +22,10 @@ public class PlayerControl : MonoBehaviour
     private void Update()
     {
         if ( Input.GetKeyDown( inputKey ) && !_isOverlapping && !_thunderStrikeActive )
+        {
             GameManager.Instance.ChangeScore( -1 );
+            AudioManager.Instance.PlaySound( "Bad" );
+        }
     }
 
     private void OnTriggerEnter2D( Collider2D other )
@@ -50,6 +53,7 @@ public class PlayerControl : MonoBehaviour
             if ( !Input.GetKeyDown( inputKey ) ) continue;
             keyPressed = true;
             GameManager.Instance.ChangeScore( 5 );
+            AudioManager.Instance.PlaySound("ThunderBonus");
             break;
         }
 
@@ -69,6 +73,9 @@ public class PlayerControl : MonoBehaviour
             if ( !Input.GetKeyDown( inputKey ) ) continue;
             keyPressed = true;
             GameManager.Instance.ChangeScore( 1 );
+            int rand = Random.Range( 1, 4 );
+            char index = ( char )( rand + 48 ); // Use ASCII trick to convert from int to char
+            AudioManager.Instance.PlaySound( "Good" + index );
             _circle.Accelerate( -1f );
         }
 

@@ -1,16 +1,14 @@
 using System;
 using UnityEngine;
 
-[RequireComponent( typeof( AudioSource ) )]
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance;
     [SerializeField] private Sound[] sounds;
-    
-    private AudioSource _audioSource;
 
     private void Awake()
     {
+        // Singleton
         if ( Instance == null )
         {
             Instance = this;
@@ -19,14 +17,19 @@ public class AudioManager : MonoBehaviour
         {
             Destroy( gameObject );
         }
-        _audioSource = GetComponent<AudioSource>();
+
+        foreach ( var sound in sounds )
+        {
+            sound.source = gameObject.AddComponent<AudioSource>();
+            sound.source.clip = sound.audioClip;
+            sound.source.volume = sound.volume;
+        }
         Thunderstorm.ThunderStrike += () => { PlaySound("Thunder"); };
     }
 
     public void PlaySound( string clipName )
     {
         var sound = Array.Find( sounds, sound => sound.name == clipName );
-        _audioSource.clip = sound.audioClip;
-        _audioSource.Play();
+        sound.source.Play();
     }
 }
