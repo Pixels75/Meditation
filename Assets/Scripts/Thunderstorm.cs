@@ -4,8 +4,6 @@ using Random = UnityEngine.Random;
 [RequireComponent( typeof( SpriteRenderer ) )]
 public class Thunderstorm : MonoBehaviour
 {
-    public static event OnThunder ThunderStrike ;
-    public delegate void OnThunder();
     [Header("Lightning Attributes")]
     [SerializeField] private float minCooldown;
     [SerializeField] private float maxCooldown;
@@ -19,6 +17,7 @@ public class Thunderstorm : MonoBehaviour
     [SerializeField] private int timerScoreThreshold;
     
     private SpriteRenderer _lightningSprite;
+    private PlayerControl _playerControl;
 
     private float _timeTillThunder;
     private float _lightningCooldown;
@@ -54,7 +53,8 @@ public class Thunderstorm : MonoBehaviour
     {
         _timeTillThunder -= Time.deltaTime;
         if ( _timeTillThunder > 0f || _struck ) return;
-        ThunderStrike?.Invoke(); // Invoke "ThunderStrike" event
+        _playerControl?.Thunder();
+        AudioManager.Instance.PlaySound("Thunder");
         _struck = true;
     }
 

@@ -24,7 +24,6 @@ public class AudioManager : MonoBehaviour
             sound.source.clip = sound.audioClip;
             sound.source.volume = sound.volume;
         }
-        Thunderstorm.ThunderStrike += () => { PlaySound("Thunder"); };
     }
 
     public void PlaySound( string clipName )

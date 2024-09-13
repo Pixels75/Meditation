@@ -17,8 +17,6 @@ public class PlayerControl : MonoBehaviour
     private void Awake()
     {
         _circle = GetComponent<Circle>();
-        // Subscribe to the "ThunderStrike" event and do the lambda expression on invocation
-        Thunderstorm.ThunderStrike += () => { StartCoroutine( CheckForThunderInput( thunderTimeframe ) ); };
     }
     private void Start()
     {
@@ -38,6 +36,11 @@ public class PlayerControl : MonoBehaviour
             SceneManager.LoadScene(gameOverScene);
         }
 
+    }
+
+    public void Thunder()
+    {
+        StartCoroutine( CheckForThunderInput( thunderTimeframe ) );
     }
 
     private void OnTriggerEnter2D( Collider2D other )
