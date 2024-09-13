@@ -277,7 +277,7 @@ MonoBehaviour:
   inputKey: 32
   thunderTimeframe: 1
   lives: 6
-  gameOverScene: TitleScreen
+  gameOverScene: GameOver
 --- !u!50 &7159893
 Rigidbody2D:
   serializedVersion: 4
