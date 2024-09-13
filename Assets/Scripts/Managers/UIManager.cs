@@ -1,3 +1,4 @@
+using System.Globalization;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,6 +8,7 @@ public class UIManager : MonoBehaviour
     
     [SerializeField] private Text scoreText;
     [SerializeField] private Text timerText;
+    [SerializeField] private Text livesText;
 
     private void Awake()
     {
@@ -34,5 +36,10 @@ public class UIManager : MonoBehaviour
             return;
         }
         timerText.text = time.ToString();
+    }
+
+    public void SetLivesText(int lives)
+    {
+        livesText.text = "Lives: " + lives;
     }
 }

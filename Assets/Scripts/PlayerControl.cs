@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [RequireComponent( typeof( Rigidbody2D ) )]
 [RequireComponent( typeof( Circle ) )]
@@ -7,7 +8,8 @@ public class PlayerControl : MonoBehaviour
 {
     [SerializeField] private KeyCode inputKey;
     [SerializeField] public float thunderTimeframe;
-    
+    [SerializeField] private int lives;
+    [SerializeField] private string gameOverScene;
     private Circle _circle;
     private bool _isOverlapping;
     private bool _thunderStrikeActive;
@@ -18,14 +20,24 @@ public class PlayerControl : MonoBehaviour
         // Subscribe to the "ThunderStrike" event and do the lambda expression on invocation
         Thunderstorm.ThunderStrike += () => { StartCoroutine( CheckForThunderInput( thunderTimeframe ) ); };
     }
-    
+    private void Start()
+    {
+        GameManager.Instance.ChangeLives(lives);
+    }
     private void Update()
     {
+        
         if ( Input.GetKeyDown( inputKey ) && !_isOverlapping && !_thunderStrikeActive )
         {
-            GameManager.Instance.ChangeScore( -1 );
+            lives -= 1;
+            GameManager.Instance.ChangeLives( -1 );
             AudioManager.Instance.PlaySound( "Bad" );
         }
+        if(lives<=0)
+        {
+            SceneManager.LoadScene(gameOverScene);
+        }
+
     }
 
     private void OnTriggerEnter2D( Collider2D other )
@@ -81,8 +93,9 @@ public class PlayerControl : MonoBehaviour
 
         if ( !keyPressed )
         {
+            lives -= 1;
             // if the key wasn't pressed reduce score
-            GameManager.Instance.ChangeScore( -1 );
+            GameManager.Instance.ChangeLives( -1 );
         }
     }
 }

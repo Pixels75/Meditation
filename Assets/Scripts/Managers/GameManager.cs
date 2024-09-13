@@ -4,6 +4,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
     public int Score { get; private set; }
+    public int Lives { get; private set; }
     
     private UIManager _uiManager;
 
@@ -24,10 +25,16 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         _uiManager.SetScoreText( Score );
+        _uiManager.SetLivesText(Lives);
     }
     
     public void ChangeScore( int scoreDelta )
     {
         Score += scoreDelta;
+    }
+
+    public void ChangeLives(int livesDelta)
+    {
+        Lives += livesDelta;
     }
 }
