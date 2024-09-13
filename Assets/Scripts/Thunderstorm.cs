@@ -28,6 +28,7 @@ public class Thunderstorm : MonoBehaviour
     {
         _lightningCooldown = timeTillStorm;
         _lightningSprite = GetComponent<SpriteRenderer>();
+        _playerControl = FindObjectOfType<PlayerControl>();
     }
 
     private void Update()
