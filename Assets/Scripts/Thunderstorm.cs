@@ -21,12 +21,13 @@ public class Thunderstorm : MonoBehaviour
 
     private float _timeTillThunder;
     private float _lightningCooldown;
-    private float _timer;
+    private float _timer = 0f;
     private bool _struck;
     
     private void Awake()
     {
         _lightningCooldown = timeTillStorm;
+        _timeTillThunder = timeTillStorm + thunderDelay;
         _lightningSprite = GetComponent<SpriteRenderer>();
         _playerControl = FindObjectOfType<PlayerControl>();
     }
@@ -61,7 +62,7 @@ public class Thunderstorm : MonoBehaviour
 
     private void DisplayTimer()
     {
-        if ( GameManager.Instance.Score >= timerScoreThreshold ) return;
+        if ( GameManager.Instance.Score >= timerScoreThreshold || _timeTillThunder > 3 ) return;
         var timer = Mathf.CeilToInt( Mathf.Max( 0f, _timeTillThunder ) );
         UIManager.Instance.SetTimerText( timer );
     }

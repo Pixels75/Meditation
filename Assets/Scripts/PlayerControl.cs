@@ -9,6 +9,15 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] private KeyCode inputKey;
     [SerializeField] public float thunderTimeframe;
     [SerializeField] private int lives;
+    [Header("Acceleration")]
+    [SerializeField] private float missAcceleration;
+    [SerializeField] private float wrongPressAcceleration;
+    [SerializeField] private float thunderAcceleration;
+    [SerializeField] private float hitDeceleration;
+    [Header("Score")]
+    [SerializeField] private int thunderBonusScore;
+    [SerializeField] private int hitScore;
+    
     private Circle _circle;
     private bool _isOverlapping;
     private bool _thunderStrikeActive;
@@ -29,12 +38,12 @@ public class PlayerControl : MonoBehaviour
             lives -= 1;
             GameManager.Instance.ChangeLives( -1 );
             AudioManager.Instance.PlaySound( "Bad" );
+            _circle.Accelerate( wrongPressAcceleration );
         }
         if( lives <= 0 )
         {
             SceneManager.LoadScene( SceneManager.GetActiveScene().buildIndex + 1 );
         }
-
     }
 
     public void Thunder()
@@ -66,14 +75,14 @@ public class PlayerControl : MonoBehaviour
 
             if ( !Input.GetKeyDown( inputKey ) ) continue;
             keyPressed = true;
-            GameManager.Instance.ChangeScore( 5 );
+            GameManager.Instance.ChangeScore( thunderBonusScore );
             AudioManager.Instance.PlaySound("ThunderBonus");
             break;
         }
 
         if ( !keyPressed )
         {
-            _circle.Accelerate( 5f ); // Speed up if the key wasn't pressed
+            _circle.Accelerate( thunderAcceleration ); // Speed up if the key wasn't pressed
         }
 
         _thunderStrikeActive = false;
@@ -86,11 +95,11 @@ public class PlayerControl : MonoBehaviour
             yield return null;
             if ( !Input.GetKeyDown( inputKey ) ) continue;
             keyPressed = true;
-            GameManager.Instance.ChangeScore( 1 );
+            GameManager.Instance.ChangeScore( hitScore );
             int rand = Random.Range( 1, 4 );
             char index = ( char )( rand + 48 ); // Use ASCII trick to convert from int to char
             AudioManager.Instance.PlaySound( "Good" + index );
-            _circle.Accelerate( -1f );
+            _circle.Accelerate( -hitDeceleration );
         }
 
         if ( !keyPressed )
@@ -98,6 +107,7 @@ public class PlayerControl : MonoBehaviour
             lives -= 1;
             // if the key wasn't pressed reduce score
             GameManager.Instance.ChangeLives( -1 );
+            _circle.Accelerate( missAcceleration );
         }
     }
 }

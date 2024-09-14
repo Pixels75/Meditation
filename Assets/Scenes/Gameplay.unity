@@ -275,8 +275,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputKey: 32
-  thunderTimeframe: 1
+  thunderTimeframe: 0.4
   lives: 6
+  missAcceleration: 1
+  wrongPressAcceleration: 1
+  thunderAcceleration: 5
+  hitDeceleration: 0.5
+  thunderBonusScore: 5
+  hitScore: 1
 --- !u!50 &7159893
 Rigidbody2D:
   serializedVersion: 4
@@ -971,7 +977,7 @@ MonoBehaviour:
   speedUpValue: 10
   thunderDelay: 3
   lightningColor: {r: 0.7688679, g: 1, b: 0.9849503, a: 1}
-  lightningDuration: 0.5
+  lightningDuration: 1
   timerScoreThreshold: 30
 --- !u!1 &1456209598
 GameObject:

@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
         UIManager.Instance?.SetScoreText( Score );
         UIManager.Instance?.SetLivesText( Lives );
         if ( SceneManager.GetActiveScene().buildIndex != 0 ) return;
+        Score = 0;
         var gameManagers = FindObjectsOfType<GameManager>();
         foreach ( var m in gameManagers )
         {
