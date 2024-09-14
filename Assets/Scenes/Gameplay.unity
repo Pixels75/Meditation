@@ -277,6 +277,7 @@ MonoBehaviour:
   inputKey: 32
   thunderTimeframe: 0.4
   lives: 6
+  invincibility: 1
   missAcceleration: 1
   wrongPressAcceleration: 1
   thunderAcceleration: 5
