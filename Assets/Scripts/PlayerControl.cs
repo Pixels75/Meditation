@@ -32,17 +32,13 @@ public class PlayerControl : MonoBehaviour
     }
     private void Update()
     {
-        
+
         if ( Input.GetKeyDown( inputKey ) && !_isOverlapping && !_thunderStrikeActive )
         {
             lives -= 1;
             GameManager.Instance.ChangeLives( -1 );
             AudioManager.Instance.PlaySound( "Bad" );
             _circle.Accelerate( wrongPressAcceleration );
-        }
-        if( lives <= 0 )
-        {
-            SceneManager.LoadScene( SceneManager.GetActiveScene().buildIndex + 1 );
         }
     }
 
