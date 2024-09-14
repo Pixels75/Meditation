@@ -1,12 +1,11 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
     public int Score { get; private set; }
     public int Lives { get; private set; }
-    
-    private UIManager _uiManager;
 
     private void Awake()
     {
@@ -14,18 +13,25 @@ public class GameManager : MonoBehaviour
         if ( Instance == null )
         {
             Instance = this;
+            DontDestroyOnLoad( gameObject );
         }
         else if ( Instance != this )
         {
             Destroy( gameObject );
         }
-        _uiManager = FindObjectOfType<UIManager>();
     }
     
     private void Update()
     {
-        _uiManager.SetScoreText( Score );
-        _uiManager.SetLivesText(Lives);
+        UIManager.Instance?.SetScoreText( Score );
+        UIManager.Instance?.SetLivesText( Lives );
+        if ( SceneManager.GetActiveScene().buildIndex != 0 ) return;
+        var gameManagers = FindObjectsOfType<GameManager>();
+        foreach ( var m in gameManagers )
+        {
+            if ( m == this ) continue;
+            Destroy( m.gameObject );
+        }
     }
     
     public void ChangeScore( int scoreDelta )

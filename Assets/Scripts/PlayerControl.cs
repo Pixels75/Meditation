@@ -9,7 +9,6 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] private KeyCode inputKey;
     [SerializeField] public float thunderTimeframe;
     [SerializeField] private int lives;
-    [SerializeField] private string gameOverScene;
     private Circle _circle;
     private bool _isOverlapping;
     private bool _thunderStrikeActive;
@@ -31,9 +30,9 @@ public class PlayerControl : MonoBehaviour
             GameManager.Instance.ChangeLives( -1 );
             AudioManager.Instance.PlaySound( "Bad" );
         }
-        if(lives<=0)
+        if( lives <= 0 )
         {
-            SceneManager.LoadScene(gameOverScene);
+            SceneManager.LoadScene( SceneManager.GetActiveScene().buildIndex + 1 );
         }
 
     }

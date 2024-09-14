@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class AudioManager : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class AudioManager : MonoBehaviour
         if ( Instance == null )
         {
             Instance = this;
+            DontDestroyOnLoad( gameObject );
         }
         else if ( Instance != this )
         {
@@ -23,6 +25,17 @@ public class AudioManager : MonoBehaviour
             sound.source = gameObject.AddComponent<AudioSource>();
             sound.source.clip = sound.audioClip;
             sound.source.volume = sound.volume;
+        }
+    }
+
+    private void Update()
+    {
+        if ( SceneManager.GetActiveScene().buildIndex != 0 ) return;
+        var audioManagers = FindObjectsOfType<AudioManager>();
+        foreach ( var m in audioManagers )
+        {
+            if ( m == this ) continue;
+            Destroy( m.gameObject );
         }
     }
 

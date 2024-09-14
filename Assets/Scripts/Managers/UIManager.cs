@@ -25,11 +25,13 @@ public class UIManager : MonoBehaviour
     
     public void SetScoreText( int score )
     {
+        if ( scoreText == null ) return;
         scoreText.text = "Score: " + score;
     }
 
     public void SetTimerText( int time )
     {
+        if ( timerText == null ) return;
         if ( time == 0 )
         {
             timerText.text = string.Empty;
@@ -40,6 +42,7 @@ public class UIManager : MonoBehaviour
 
     public void SetLivesText(int lives)
     {
+        if ( livesText == null ) return;
         livesText.text = "Lives: " + lives;
     }
 }
